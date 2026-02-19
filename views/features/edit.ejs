@@ -1,0 +1,54 @@
+<section class="flex items-center justify-center">
+
+  <div class="w-full max-w-lg bg-white rounded-xl shadow-md border border-teal-200 p-8 space-y-6">
+
+    <!-- Heading -->
+    <div class="text-center">
+      <div
+        class="mx-auto w-14 h-14 flex items-center justify-center rounded-full bg-green-100 text-green-600 text-2xl mb-4">
+        <span class="bg-gradient-to-t from-emerald-400 to-teal-600 bg-clip-text text-transparent"><i class="fa-solid fa-user-pen"></i></span>
+      </div>
+      <h2
+        class="text-2xl font-bold text-2xl font-bold bg-gradient-to-t from-emerald-400 to-teal-600 bg-clip-text text-transparent transition-all duration-300 ease-in-out hover:brightness-110">
+        Edit User
+      </h2>
+      <p class="text-gray-500 mt-2 text-sm">
+        Editing account:
+        <span class="font-medium text-gray-700">
+          <%= user.email %>
+        </span>
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form method="POST" action="/user/<%= user.id %>?_method=PATCH" class="space-y-5">
+
+      <!-- Username -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-2">
+          Username
+        </label>
+        <textarea name="username" rows="3" required
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition resize-none"><%= user.username %></textarea>
+      </div>
+
+      <!-- Password Verification -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-2">
+          Confirm Password
+        </label>
+        <input type="password" name="password" required placeholder="Enter current password"
+          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit"
+        class="bg-gradient-to-r from-emerald-400 to-teal-600 font-semibold text-white px-4 py-3 rounded-lg transition-all duration-300 ease-in-out hover:brightness-110 w-full cursor-pointer">
+        Update Username
+      </button>
+
+    </form>
+
+  </div>
+
+</section>

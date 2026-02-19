@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/favicon.ico" />
+  <title>ManageX | User management, admin panels, analytics, and more</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+
+<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+
+  <%- include("../includes/navbar.ejs") %>
+
+    <% if (success && success.length> 0) { %>
+      <div id="flash-message" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <div class="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded-lg">
+          <%= success %>
+        </div>
+      </div>
+      <% } %>
+
+        <% if (error && error.length> 0) { %>
+          <div id="flash-message" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+            <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-lg">
+              <%= error %>
+            </div>
+          </div>
+          <% } %>
+
+            <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+              <%- body %>
+            </main>
+
+            <%- include("../includes/footer.ejs") %>
+
+              <script src="/js/script.js"></script>
+</body>
+
+</html>

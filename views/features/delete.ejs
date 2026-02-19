@@ -1,0 +1,61 @@
+<section class="flex items-center justify-center">
+
+    <div class="w-full max-w-lg bg-white rounded-xl shadow-md border border-red-200 p-8 space-y-6">
+
+        <!-- Warning Header -->
+        <div class="text-center">
+            <div
+                class="mx-auto w-14 h-14 flex items-center justify-center rounded-full bg-red-100 text-red-600 text-2xl mb-4">
+                <span class="bg-gradient-to-t from-red-400 via-rose-500 to-red-700 bg-clip-text text-transparent"><i class="fa-solid fa-triangle-exclamation"></i></span>
+            </div>
+
+            <h2 class="text-2xl font-bold bg-gradient-to-t 
+       from-red-400 
+       via-rose-500 
+       to-red-700 
+       bg-clip-text 
+       text-transparent transition-all duration-300 ease-in-out hover:brightness-110">
+                Confirm Deletion
+            </h2>
+
+            <p class="text-gray-600 mt-2 text-sm">
+                You are about to permanently delete:
+            </p>
+
+            <p class="font-semibold text-gray-800 mt-2 break-all">
+                <%= user.email %>
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form method="POST" action="/user/<%= user.id %>?_method=DELETE" class="space-y-5">
+
+            <!-- Show Username (Readonly) -->
+            <div>
+                <label class="block text-sm font-medium text-gray-600 mb-2">
+                    Username
+                </label>
+                <textarea rows="2" readonly
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-700 resize-none cursor-not-allowed focus:outline-none"><%= user.username %></textarea>
+            </div>
+
+            <!-- Password Verification -->
+            <div>
+                <label class="block text-sm font-medium text-gray-600 mb-2">
+                    Confirm Password
+                </label>
+                <input type="password" name="password" required placeholder="Enter current password"
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition" />
+            </div>
+
+            <!-- Danger Button -->
+            <button type="submit"
+                class="bg-gradient-to-r from-rose-500 to-rose-700 font-semibold text-white px-4 py-3 rounded-lg transition-all duration-300 ease-in-out hover:brightness-110 w-full cursor-pointer">
+                Confirm Delete
+            </button>
+
+        </form>
+
+    </div>
+
+</section>

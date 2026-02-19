@@ -1,0 +1,84 @@
+<nav class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a
+        href="/"
+        class="flex items-center space-x-2 text-emerald-600 font-semibold text-lg"
+      >
+        <span
+          class="bg-gradient-to-t from-emerald-400 to-teal-600 bg-clip-text text-transparent"
+          ><i class="fa-solid fa-layer-group"></i
+        ></span>
+        <span
+          class="bg-gradient-to-t from-emerald-400 to-teal-600 bg-clip-text text-transparent"
+          >ManageX</span
+        >
+      </a>
+
+      <!-- Desktop Menu -->
+      <div
+        class="hidden md:flex items-center space-x-8 text-gray-600 font-medium"
+      >
+        <span
+          class="bg-gradient-to-t from-emerald-400 to-teal-600 bg-clip-text text-transparent transition-all duration-300 ease-in-out hover:brightness-110 hover:scale-105"
+          ><a href="/"
+            >Dashboard</a
+          ></span
+        >
+        <span
+          class="bg-gradient-to-t from-emerald-400 to-teal-600 bg-clip-text text-transparent transition-all duration-300 ease-in-out hover:brightness-110 hover:scale-105"
+          ><a href="/user"
+            >Users</a
+          ></span
+        >
+        <a
+          href="/user/new"
+          class="bg-gradient-to-r from-emerald-400 to-teal-600 text-white px-4 py-2 rounded-lg transition-all duration-300 ease-in-out hover:brightness-110 hover:scale-105"
+        >
+          Add User
+        </a>
+      </div>
+
+      <!-- Mobile Button -->
+      <button id="mobileMenuButton" class="md:hidden text-gray-600 text-xl">
+        <span
+          class="bg-gradient-to-t from-emerald-400 to-teal-600 bg-clip-text text-transparent"
+          ><i class="fa-solid fa-bars"></i
+        ></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobileMenu"
+    class="hidden bg-white px-4 py-4 space-y-4 text-gray-600"
+  >
+    <div class="text-center">
+      <a href="/" class="block hover:text-emerald-600 transition">Dashboard</a>
+    </div>
+    <div class="text-center">
+      <a href="/user" class="block hover:text-emerald-600 transition">Users</a>
+    </div>
+    <div class="text-center">
+      <a
+        href="/user/new"
+        class="block bg-gradient-to-r from-emerald-400 to-teal-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition-all duration-300 ease-in-out hover:brightness-110 hover:scale-105 text-center"
+      >
+        Add User
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const button = document.getElementById("mobileMenuButton");
+    const menu = document.getElementById("mobileMenu");
+
+    if (button) {
+      button.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+      });
+    }
+  </script>
+</nav>

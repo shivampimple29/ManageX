@@ -1,0 +1,127 @@
+<section class="space-y-8">
+
+<!-- Hero Section -->
+<section class="flex flex-col lg:flex-row items-center 
+                justify-between px-8 lg:px-10 py-10 
+                bg-white rounded-xl overflow-hidden">
+
+  <!-- LEFT SIDE -->
+  <div class="flex-1 text-center lg:text-left space-y-6">
+
+    <h1 class="text-3xl sm:text-4xl lg:text-[2.7rem] 
+               font-semibold text-gray-900 leading-tight">
+      Welcome to 
+      <span class="bg-gradient-to-t from-emerald-400 to-teal-600 bg-clip-text text-transparent">
+        ManageX
+      </span>
+      <br class="hidden sm:block">
+      Simplify User Management
+      <br class="hidden sm:block">
+      Empower Your Team
+    </h1>
+
+    <p class="text-gray-600 max-w-xl font-semibold 
+              mx-auto lg:mx-0 text-base sm:text-lg">
+      Efficiently manage users with a clean and powerful admin interface.
+      Start exploring today.
+    </p>
+
+    <a href="/user/new"
+       class="inline-flex items-center justify-center
+              bg-gradient-to-r from-emerald-400 to-teal-600 
+              text-white font-bold 
+              px-6 py-3 rounded-lg 
+              transition-all duration-300 ease-in-out 
+              hover:brightness-110 hover:scale-105">
+      Join Us 
+      <span class="pl-2">
+        <i class="fa-solid fa-arrow-right"></i>
+      </span>
+    </a>
+
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="flex-1 mt-8 sm:mt-10 lg:mt-0 
+              flex justify-center items-center overflow-hidden">
+
+    <img src="/album/hero.png"
+         alt="ManageX hero image"
+         class="w-full max-w-md scale-120 sm:max-w-lg lg:max-w-full 
+                h-auto
+                lg:transition-transform duration-500">
+  </div>
+
+</section>
+
+
+
+  <!-- Stats Card Section -->
+   <section>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- Total Users Card -->
+    <div class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-500 text-sm font-medium">
+            Total Users
+          </p>
+          <h2 class="text-3xl font-bold text-gray-800 mt-2">
+            <%= count %>
+          </h2>
+        </div>
+
+        <div class="bg-gradient-to-t from-orange-400 
+       to-orange-600 text-white p-4 rounded-lg text-xl">
+          <i class="fa-solid fa-users"></i>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Placeholder Card 1 -->
+    <div class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-500 text-sm font-medium">
+            Active Status
+          </p>
+          <h2 class="text-2xl font-semibold text-gray-800 mt-2">
+            System Running
+          </h2>
+        </div>
+
+        <div class="bg-gradient-to-t from-sky-400 to-blue-800 text-white p-4 rounded-lg text-xl">
+          <i class="fa-solid fa-server"></i>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Placeholder Card 2 -->
+    <div class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-500 text-sm font-medium">
+            Platform
+          </p>
+          <h2 class="text-2xl font-semibold text-gray-800 mt-2">
+            Admin Panel
+          </h2>
+        </div>
+
+        <div class="bg-gradient-to-t from-purple-500 to-purple-700 text-white p-4 rounded-lg text-xl">
+          <i class="fa-solid fa-layer-group"></i>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  </section>
+
+</section>
