@@ -4,7 +4,8 @@
   <div class="flex flex-col items-center justify-center text-center gap-2">
 
     <div>
-      <h1 class="text-3xl font-bold bg-gradient-to-t from-emerald-400 to-teal-600 bg-clip-text text-transparent transition-all duration-300 ease-in-out hover:brightness-110">
+      <h1
+        class="text-3xl font-bold bg-gradient-to-t from-emerald-400 to-teal-600 bg-clip-text text-transparent transition-all duration-300 ease-in-out hover:brightness-110">
         User Management
       </h1>
       <p class="text-gray-500">
@@ -17,12 +18,7 @@
   <form method="GET" action="/user">
     <div class="flex flex-col justify-center sm:flex-row gap-3 items-stretch sm:items-center">
 
-      <input
-        type="text"
-        name="search"
-        value="<%= search || '' %>"
-        placeholder="Search by username or email..."
-        class="w-full sm:w-96 
+      <input type="text" name="search" value="<%= search || '' %>" placeholder="Search by username or email..." class="w-full sm:w-96 
        px-4 py-3 rounded-lg 
        border border-emerald-300 
        bg-white 
@@ -31,12 +27,9 @@
        focus:ring-2 focus:ring-emerald-400 
        focus:border-emerald-500 
        focus:outline-none 
-       transition duration-300"
+       transition duration-300">
 
-      >
-
-      <button
-        type="submit"
+      <button type="submit"
         class="bg-gradient-to-r from-emerald-400 to-teal-600 text-white cursor-pointer px-5 py-3 rounded-lg transition-all duration-300 ease-in-out hover:brightness-110 hover:scale-105 sm:w-auto">
         Search
       </button>
@@ -53,7 +46,8 @@
       <table class="w-full min-w-[800px] text-center text-sm">
 
         <!-- Head -->
-        <thead class="bg-gray-50 border-b border-gray-200 bg-gradient-to-t from-emerald-400 to-teal-600 bg-clip-text text-transparent transition-all duration-300 ease-in-out hover:brightness-110 uppercase text-xs tracking-wider">
+        <thead
+          class="bg-gray-50 border-b border-gray-200 bg-gradient-to-t from-emerald-400 to-teal-600 bg-clip-text text-transparent transition-all duration-300 ease-in-out hover:brightness-110 uppercase text-xs tracking-wider">
           <tr>
             <th class="px-6 py-4">ID</th>
             <th class="px-6 py-4">Email</th>
@@ -65,7 +59,7 @@
         <!-- Body -->
         <tbody class="divide-y divide-gray-100">
 
-          <% if (users.length === 0) { %>
+          <% if (users.length===0) { %>
 
             <tr>
               <td colspan="4" class="text-center py-14">
@@ -80,76 +74,75 @@
               </td>
             </tr>
 
-          <% } else { %>
+            <% } else { %>
 
-            <% for (let user of users) { %>
+              <% for (let user of users) { %>
 
-              <tr class="hover:bg-emerald-50 transition duration-150">
+                <tr class="hover:bg-emerald-50 transition duration-150">
 
-                <!-- UUID -->
-                <td class="px-6 py-4 font-mono text-xs text-gray-500 whitespace-nowrap">
-                  <%= user.id %>
-                </td>
+                  <!-- UUID -->
+                  <td class="px-6 py-4 font-mono text-xs text-gray-500 whitespace-nowrap">
+                    <%= user.id %>
+                  </td>
 
-                <!-- Email -->
-                <td class="px-6 py-4 text-gray-700 whitespace-nowrap">
-                  <%= user.email %>
-                </td>
+                  <!-- Email -->
+                  <td class="px-6 py-4 text-gray-700 whitespace-nowrap">
+                    <%= user.email %>
+                  </td>
 
-                <!-- Username -->
-                <td class="px-6 py-4 font-medium text-gray-800 whitespace-nowrap">
-                  <%= user.username %>
-                </td>
+                  <!-- Username -->
+                  <td class="px-6 py-4 font-medium text-gray-800 whitespace-nowrap">
+                    <%= user.username %>
+                  </td>
 
-                <!-- Actions -->
-                <td class="px-6 py-4 text-center">
-                  <div class="flex justify-center space-x-3">
+                  <!-- Actions -->
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center space-x-3">
 
-                    <a href="/user/<%= user.id %>/edit"
-                      class="bg-blue-500 text-white px-3 py-1.5 rounded-md text-bold transition-all duration-300 ease-in-out hover:brightness-110 hover:scale-105">
-                      Edit
-                    </a>
+                      <a href="/user/<%= user.id %>/edit"
+                        class="bg-blue-500 text-white px-3 py-1.5 rounded-md text-bold transition-all duration-300 ease-in-out hover:brightness-110 hover:scale-105">
+                        Edit
+                      </a>
 
-                    <a href="/user/<%= user.id %>/delete"
-                      class="bg-red-500 text-white px-3 py-1.5 rounded-md transition-all duration-300 ease-in-out text-sm hover:brightness-110 hover:scale-105">
-                      Delete
-                    </a>
+                      <a href="/user/<%= user.id %>/delete"
+                        class="bg-red-500 text-white px-3 py-1.5 rounded-md transition-all duration-300 ease-in-out text-sm hover:brightness-110 hover:scale-105">
+                        Delete
+                      </a>
 
-                  </div>
-                </td>
+                    </div>
+                  </td>
 
-              </tr>
+                </tr>
 
-            <% } %>
+                <% } %>
 
-          <% } %>
-
+                  <% } %>
         </tbody>
-
       </table>
-
     </div>
 
     <!-- Pagination -->
-    <% if (totalPages > 1) { %>
+    <% if (totalPages> 1) { %>
+      <div class="border-t border-gray-100 py-6">
 
-      <div class="flex justify-center py-6 space-x-2 border-t border-gray-100">
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-3 max-w-full overflow-x-auto px-2">
 
-        <% for (let i = 1; i <= totalPages; i++) { %>
-          <a
-            href="/user?page=<%= i %><%= search ? '&search=' + search : '' %>"
-            class="px-4 py-2 rounded-lg border text-sm
+          <% for (let i=1; i <=totalPages; i++) { %>
+
+            <a href="/user?page=<%= i %><%= search ? '&search=' + search : '' %>" 
+              class="min-w-[36px] sm:min-w-[40px]text-center px-3 py-2 text-sm 
+            rounded-lg border transition-all duration-200
             <%= i === currentPage
-              ? 'bg-gradient-to-r from-emerald-400 to-teal-600 text-white px-4 py-2 rounded-lg transition-all duration-300 ease-in-out hover:brightness-110 hover:scale-105'
-              : 'bg-white text-gray-700 hover:bg-gray-100' %>">
-            <%= i %>
-          </a>
-        <% } %>
+              ? 'bg-gradient-to-r from-emerald-400 to-teal-600 text-white border-transparent'
+              : 'bg-white text-gray-700 hover:bg-gray-100 border-gray-200' %>">
+              <%= i %>
+            </a>
+
+            <% } %>
+
+        </div>
 
       </div>
-
-    <% } %>
-
+      <% } %>
   </div>
-
 </section>

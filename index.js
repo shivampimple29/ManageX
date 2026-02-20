@@ -24,14 +24,16 @@ const connection = mysql.createConnection({
   user: process.env.MYSQLUSER,
   database: process.env.MYSQLDATABASE,
   password: process.env.MYSQLPASSWORD,
-  port:process.env.MYSQLPORT
+  port: process.env.MYSQLPORT,
 });
 
-app.use(session({
-  secret: "managesecret",
-  resave: false,
-  saveUninitialized: true
-}));
+app.use(
+  session({
+    secret: "managesecret",
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
 
 app.use(flash());
 
@@ -40,7 +42,6 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   next();
 });
-
 
 let getRandomUser = () => {
   return [
@@ -86,18 +87,18 @@ app.get("/user", (req, res) => {
   let queryParams = [];
 
   //  SEARCH
-  try{
-  if (search && search.trim() !== "") {
-    baseQuery += " WHERE username LIKE ? OR email LIKE ?";
-    countQuery += " WHERE username LIKE ? OR email LIKE ?";
-    queryParams.push(`%${search}%`, `%${search}%`);
+  try {
+    if (search && search.trim() !== "") {
+      baseQuery += " WHERE username LIKE ? OR email LIKE ?";
+      countQuery += " WHERE username LIKE ? OR email LIKE ?";
+      queryParams.push(`%${search}%`, `%${search}%`);
+    }
+  } catch (err) {
+    console.log(err);
+    res.send("saerched element is not present !");
   }
-}catch(err){
-  console.log(err);
-  res.send("saerched element is not present !")
-}
 
-  // PAGINATION 
+  // PAGINATION
   let limit = 20;
   page = parseInt(page) || 1;
   let offset = (page - 1) * limit;
@@ -123,13 +124,11 @@ app.get("/user", (req, res) => {
         users,
         currentPage: page,
         totalPages,
-        search: search || ""
+        search: search || "",
       });
     });
   });
-
 });
-
 
 app.get("/user/:id/edit", (req, res) => {
   let { id } = req.params;
@@ -163,28 +162,43 @@ app.get("/user/:id/delete", (req, res) => {
 // Update DB route
 
 app.patch("/user/:id", (req, res) => {
-  let { id } = req.params;
-  let { password: formPass, username: newUsername } = req.body;
-  let q = `select * from user where id='${id}'`;
-  try {
-    connection.query(q, (err, result) => {
-      if (err) throw err;
-      let user = result[0];
-      if (formPass != user.password) {
-        res.send("wrong password");
-      } else {
-        let q2 = `update user set username='${newUsername}' where id='${id}'`;
-        connection.query(q2, (err, result) => {
-          if (err) throw err;
-          req.flash("success", "User updated successfully!");
-          res.redirect("/user");
-        });
+  const { id } = req.params;
+  const { password: formPassword, username: newUsername } = req.body;
+
+  const selectQuery = "SELECT * FROM user WHERE id = ?";
+
+  connection.query(selectQuery, [id], (selectError, result) => {
+    if (selectError) {
+      console.error(selectError);
+      req.flash("error", "Database error");
+      return res.redirect("/user");
+    }
+
+    if (result.length === 0) {
+      req.flash("error", "User not found");
+      return res.redirect("/user");
+    }
+
+    const user = result[0];
+
+    if (formPassword !== user.password) {
+      req.flash("error", "Wrong password. Unable to edit!");
+      return res.redirect(`/user/${id}/edit`);
+    }
+
+    const updateQuery = "UPDATE user SET username = ? WHERE id = ?";
+
+    connection.query(updateQuery, [newUsername, id], (updateError) => {
+      if (updateError) {
+        console.error(updateError);
+        req.flash("error", "Failed to update user");
+        return res.redirect(`/user/${id}`);
       }
+
+      req.flash("success", "User updated successfully!");
+      return res.redirect("/user");
     });
-  } catch {
-    console.log(err);
-    res.send("some error in database!");
-  }
+  });
 });
 
 app.post("/user", (req, res) => {
@@ -205,30 +219,43 @@ app.post("/user", (req, res) => {
 
 // delete from DB
 app.delete("/user/:id", (req, res) => {
-  let { id } = req.params;
-  let { password: formPass } = req.body;
-  let q = `select * from user where id='${id}'`;
-  try {
-    connection.query(q, (err, result) => {
-      if (err) throw err;
-      let user = result[0];
-      if (formPass != user.password) {
-        req.flash("error", "wrong password. unable to delete!");
-        res.redirect(`/user/${id}/delete`);
-        // res.send("wrong password. unable to delete!");
-      } else {
-        let q2 = `delete from user where id='${id}'`;
-        connection.query(q2, (err, result) => {
-          if (err) throw err;
-          req.flash("success", "User deleted successfully!");
-          res.redirect("/user");
-        });
+  const { id } = req.params;
+  const { password: formPassword } = req.body;
+
+  const selectQuery = "SELECT * FROM user WHERE id = ?";
+
+  connection.query(selectQuery, [id], (selectError, result) => {
+    if (selectError) {
+      console.error(selectError);
+      req.flash("error", "Database error");
+      return res.redirect("/user");
+    }
+
+    if (result.length === 0) {
+      req.flash("error", "User not found");
+      return res.redirect("/user");
+    }
+
+    const user = result[0];
+
+    if (formPassword !== user.password) {
+      req.flash("error", "Wrong password. Unable to delete!");
+      return res.redirect(`/user/${id}/delete`);
+    }
+
+    const deleteQuery = "DELETE FROM user WHERE id = ?";
+
+    connection.query(deleteQuery, [id], (deleteError) => {
+      if (deleteError) {
+        console.error(deleteError);
+        req.flash("error", "Failed to delete user");
+        return res.redirect(`/user/${id}/delete`);
       }
+
+      req.flash("success", "User deleted successfully!");
+      return res.redirect("/user");
     });
-  } catch {
-    console.log(err);
-    res.send("some error in database!");
-  }
+  });
 });
 
 app.listen(port, () => {
