@@ -78,14 +78,6 @@ app.get("/", (req, res) => {
   }
 });
 
-// User page
-app.get("/user", (req, res) => {
-  let { search, page } = req.query;
-
-  let baseQuery = "SELECT * FROM user";
-  let countQuery = "SELECT COUNT(*) AS total FROM user";
-  let queryParams = [];
-
 //routine health check 
 app.get("/health", async (request, response) => {
   try {
@@ -102,6 +94,14 @@ app.get("/health", async (request, response) => {
     });
   }
 });
+// User page
+app.get("/user", (req, res) => {
+  let { search, page } = req.query;
+
+  let baseQuery = "SELECT * FROM user";
+  let countQuery = "SELECT COUNT(*) AS total FROM user";
+  let queryParams = [];
+
   //  SEARCH
   try {
     if (search && search.trim() !== "") {
