@@ -78,7 +78,7 @@ app.get("/", (req, res) => {
   }
 });
 
-//routine health check 
+//routine health check
 app.get("/health", async (request, response) => {
   try {
     response.status(200).json({
@@ -94,6 +94,12 @@ app.get("/health", async (request, response) => {
     });
   }
 });
+
+// User/new must be before /:id routes
+app.get("/user/new", (req, res) => {
+  res.render("./features/new");
+});
+
 // User page
 app.get("/user", (req, res) => {
   let { search, page } = req.query;
@@ -148,28 +154,24 @@ app.get("/user", (req, res) => {
 
 app.get("/user/:id/edit", (req, res) => {
   let { id } = req.params;
-  let q = `select * from user where id='${id}'`;
+  let q = `select * from user where id=?`;
   try {
-    connection.query(q, (err, result) => {
+    connection.query(q, [id], (err, result) => {
       if (err) throw err;
       let user = result[0];
       res.render("./features/edit", { user });
     });
-  } catch {
+  } catch (err) {
     console.log(err);
     res.send("some error in database!");
   }
 });
 
-app.get("/user/new", (req, res) => {
-  res.render("./features/new");
-});
-
 app.get("/user/:id/delete", (req, res) => {
   let { id } = req.params;
-  let q = `select * from user where id='${id}'`;
+  let q = `select * from user where id=?`;
 
-  connection.query(q, (err, result) => {
+  connection.query(q, [id], (err, result) => {
     if (err) return res.send("DB error");
     res.render("./features/delete", { user: result[0] });
   });
@@ -220,14 +222,14 @@ app.patch("/user/:id", (req, res) => {
 app.post("/user", (req, res) => {
   let { email, username, password } = req.body;
   let id = uuidv4();
-  let q = `insert into user values ('${id}','${username}','${email}','${password}')`;
+  let q = `insert into user values (?,?,?,?)`;
   try {
-    connection.query(q, (err, result) => {
+    connection.query(q, [id, username, email, password], (err, result) => {
       if (err) throw err;
       req.flash("success", "User added successfully!");
       res.redirect("/user");
     });
-  } catch {
+  } catch (err) {
     console.log(err);
     res.send("some error in database!");
   }
