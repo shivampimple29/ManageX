@@ -86,6 +86,22 @@ app.get("/user", (req, res) => {
   let countQuery = "SELECT COUNT(*) AS total FROM user";
   let queryParams = [];
 
+//routine health check 
+app.get("/health", async (request, response) => {
+  try {
+    response.status(200).json({
+      status: "OK",
+      database: "connected",
+      uptime: process.uptime(),
+      timestamp: new Date(),
+    });
+  } catch (error) {
+    response.status(500).json({
+      status: "ERROR",
+      database: "disconnected",
+    });
+  }
+});
   //  SEARCH
   try {
     if (search && search.trim() !== "") {
