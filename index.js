@@ -19,16 +19,20 @@ app.set("layout", "layouts/boilerplate");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.static(path.join(__dirname, "public")));
 
-// FIX 1: createPool
-const connection = mysql.createPool({
+const connection = mysql.createConnection({
   host: process.env.MYSQLHOST,
   user: process.env.MYSQLUSER,
   database: process.env.MYSQLDATABASE,
   password: process.env.MYSQLPASSWORD,
   port: process.env.MYSQLPORT,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
+});
+
+connection.connect((err) => {
+  if (err) {
+    console.error("❌ DB connection failed:", err.message);
+  } else {
+    console.log("✅ DB connected successfully");
+  }
 });
 
 app.use(
@@ -86,7 +90,6 @@ app.get("/", (req, res) => {
 });
 
 //routine health check
-// FIX 2: Real DB ping health check
 app.get("/health", (req, res) => {
   connection.query("SELECT 1", (err) => {
     if (err) {
