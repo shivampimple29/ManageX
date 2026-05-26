@@ -19,12 +19,16 @@ app.set("layout", "layouts/boilerplate");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.static(path.join(__dirname, "public")));
 
-const connection = mysql.createConnection({
+// FIX 1: createPool
+const connection = mysql.createPool({
   host: process.env.MYSQLHOST,
   user: process.env.MYSQLUSER,
   database: process.env.MYSQLDATABASE,
   password: process.env.MYSQLPASSWORD,
   port: process.env.MYSQLPORT,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
 app.use(
@@ -68,7 +72,10 @@ app.get("/", (req, res) => {
   let q = "select count(*) from user";
   try {
     connection.query(q, (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.log(err);
+        return res.send("Database error");
+      }
       let count = result[0]["count(*)"];
       res.render("./features/home", { count });
     });
@@ -79,20 +86,23 @@ app.get("/", (req, res) => {
 });
 
 //routine health check
-app.get("/health", async (request, response) => {
-  try {
-    response.status(200).json({
+// FIX 2: Real DB ping health check
+app.get("/health", (req, res) => {
+  connection.query("SELECT 1", (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({
+        status: "ERROR",
+        database: "disconnected",
+      });
+    }
+    res.status(200).json({
       status: "OK",
       database: "connected",
       uptime: process.uptime(),
       timestamp: new Date(),
     });
-  } catch (error) {
-    response.status(500).json({
-      status: "ERROR",
-      database: "disconnected",
-    });
-  }
+  });
 });
 
 // User/new must be before /:id routes
@@ -157,7 +167,10 @@ app.get("/user/:id/edit", (req, res) => {
   let q = `select * from user where id=?`;
   try {
     connection.query(q, [id], (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.log(err);
+        return res.send("Database error");
+      }
       let user = result[0];
       res.render("./features/edit", { user });
     });
@@ -225,7 +238,10 @@ app.post("/user", (req, res) => {
   let q = `insert into user values (?,?,?,?)`;
   try {
     connection.query(q, [id, username, email, password], (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.log(err);
+        return res.send("some error in database!");
+      }
       req.flash("success", "User added successfully!");
       res.redirect("/user");
     });
