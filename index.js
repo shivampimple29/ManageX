@@ -94,26 +94,14 @@ const connection = mysql.createPool({
 
 connection.getConnection((error, databaseConnection) => {
   if (error) {
-    console.error("❌ Database Connection Failed");
+    console.error("Database Connection Failed");
     console.error(error.message);
-    process.exit(1);
+    return;
   }
 
-  console.log("✅ Database Connected Successfully");
+  console.log("Database Connected Successfully");
   databaseConnection.release();
 });
-
-/* ======================================================
-   Keep Database Connection Alive
-====================================================== */
-
-setInterval(() => {
-  connection.query("SELECT 1", (error) => {
-    if (error) {
-      console.error("Keep Alive Failed:", error.message);
-    }
-  });
-}, 5 * 60 * 1000);
 
 /* ======================================================
    Graceful Shutdown
@@ -216,21 +204,33 @@ app.get("/", (req, res) => {
 
 //routine health check
 /* ======================================================
-   Health Check
+   Health Check (Application Liveness)
 ====================================================== */
 
 app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    memory: process.memoryUsage(),
+    node: process.version,
+  });
+});
+
+/* ======================================================
+   Database Health Check
+====================================================== */
+
+app.get("/health/db", (req, res) => {
   connection.query("SELECT 1", (error) => {
     if (error) {
-      console.error(error);
+      console.error("Database health check failed:", error.message);
 
-      return res.status(500).json({
+      return res.status(503).json({
         status: "ERROR",
         database: "Disconnected",
         uptime: process.uptime(),
         timestamp: new Date().toISOString(),
-        memory: process.memoryUsage(),
-        node: process.version,
       });
     }
 
@@ -239,8 +239,6 @@ app.get("/health", (req, res) => {
       database: "Connected",
       uptime: process.uptime(),
       timestamp: new Date().toISOString(),
-      memory: process.memoryUsage(),
-      node: process.version,
     });
   });
 });
@@ -510,7 +508,7 @@ app.use((error, req, res, next) => {
 ====================================================== */
 
 const server = app.listen(port, () => {
-  console.log(`🚀 Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
 
 /* ======================================================
